@@ -1,47 +1,49 @@
-import {
-  Autocomplete,
-  AutocompleteOption,
-  CircularProgress,
-  ListItemContent,
-  ListItemDecorator,
-  Typography,
-} from '@mui/joy';
+import React from 'react';
 import useGetClients from '../../queries/use-get-clients';
-import application, { ApplicationEntity, ApplicationEventType } from '../../common/application';
+import { ApplicationEntity, ApplicationEventType } from '../../common/application';
+import { Autocomplete, Box, CircularProgress, TextField, Typography } from '@mui/material';
 import Search from '@mui/icons-material/Search';
-import User from '@mui/icons-material/FaceOutlined';
+import User from '@mui/icons-material/VerifiedUserOutlined';
+import globalConfig from '../../common/globalConfig';
+export type AutoCompleteComponentProps = {
+  onSelect?: (value?: unknown) => void;
+};
 
-const AutoComplete: React.FC<unknown> = () => {
+const AutoCompleteComponent: React.FC<AutoCompleteComponentProps> = (props) => {
   const { data, isLoading } = useGetClients({});
-  const clients = data?.data.items || [];
+  const clients = data?.data?.items || [];
   return (
     <Autocomplete
-      startDecorator={isLoading ? <CircularProgress size='sm' /> : <Search />}
       options={clients}
-      getOptionLabel={(option) => `${option?.firstName} ${option?.lastName}`}
-      getOptionKey={(option) => option.clientId}
-      autoHighlight
-      size='lg'
+      getOptionLabel={(option) => `${option.clientId}`}
+      sx={{ minWidth: { xs: 'auto', sm: 400 } }}
       onChange={(_, value) => {
-        application.broadcast({
+        globalConfig.getInstance().broadcast({
           type: ApplicationEventType.Redirection,
           entityType: ApplicationEntity.Client,
           data: value,
         });
+        props?.onSelect?.(value);
       }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          placeholder='Type to search ...'
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: isLoading ? <CircularProgress size='sm' /> : <Search />,
+          }}
+        />
+      )}
       loading={isLoading}
       renderOption={(props, option) => (
-        <AutocompleteOption {...props}>
-          <ListItemDecorator>
-            <User />
-          </ListItemDecorator>
-          <ListItemContent sx={{ fontSize: 'sm' }}>
-            <Typography level='body-xs'>{`${option?.firstName} ${option?.lastName}`}</Typography>
-          </ListItemContent>
-        </AutocompleteOption>
+        <Box component='li' sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }} {...props}>
+          <User />
+          <Typography sx={{ ml: 2 }} variant='body2'>{`${option?.firstName} ${option?.lastName}`}</Typography>
+        </Box>
       )}
     />
   );
 };
 
-export default AutoComplete;
+export default AutoCompleteComponent;

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import appConfig from '../application';
+import globalConfig from '../globalConfig';
 
-const { baseURL, token } = appConfig.get();
+const { baseURL, token } = globalConfig.getInstance().getOptions();
 
 const instance = axios.create({
   baseURL,

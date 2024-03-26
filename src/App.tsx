@@ -1,15 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { YocaleFinder } from '.';
 import './App.css';
-import MainDialog from './components/MainDialog';
-
-const queryClient = new QueryClient();
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <MainDialog />
-    </QueryClientProvider>
-  );
+  return <YocaleFinder />;
 }
 
 export default App;

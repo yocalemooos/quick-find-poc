@@ -1,23 +1,44 @@
+import React from 'react';
 import { useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Modal, ModalClose, ModalDialog, ModalProps, Typography, useTheme } from '@mui/joy';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import AutoComplete from '../AutoComplete';
+import { Dialog, DialogContent, DialogTitle, Typography, useMediaQuery, useTheme } from '@mui/material';
+import useApplication from '../../providers/ApplicationProvider/hooks/use-application';
 
-const MainDialog: React.FC<Partial<ModalProps>> = (props) => {
+export type MainDialogProps = {
+  token?: string;
+  baseURL?: string;
+  hotKey?: string;
+};
+
+const MainDialog: React.FC<Partial<MainDialogProps>> = (props = {}) => {
   const [open, setOpen] = useState(false);
-  useHotkeys('ctrl+k', () => setOpen(true));
+  const { globalConfig } = useApplication();
+  const { hotKey = globalConfig?.getOptions()?.defaultHotkey as string } = props;
+  useHotkeys(hotKey, async () => {
+    try {
+      await globalConfig?.onOpenDialog?.();
+      setOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
+  });
   const { breakpoints } = useTheme();
   const isXs = useMediaQuery(breakpoints.down('sm'));
 
+  const close = () => {
+    setOpen(false);
+  };
+
   return (
-    <Modal {...props} open={open} onClose={() => setOpen(false)}>
-      <ModalDialog size='lg' layout={isXs ? 'fullscreen' : 'center'}>
-        <ModalClose />
+    <Dialog fullScreen={isXs} maxWidth='md' {...props} open={open} onClose={close}>
+      <DialogTitle>
         <Typography>Search</Typography>
-        <AutoComplete />
-      </ModalDialog>
-    </Modal>
+      </DialogTitle>
+      <DialogContent>
+        <AutoComplete onSelect={close} />
+      </DialogContent>
+    </Dialog>
   );
 };
 export default MainDialog;

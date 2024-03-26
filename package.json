@@ -1,13 +1,30 @@
 {
   "name": "quick-find-poc",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.4.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
+  },
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles": "./dist/style.css"
+  },
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -17,12 +34,13 @@
     "@mui/joy": "5.0.0-beta.31",
     "@mui/material": "^5.15.14",
     "@tanstack/react-query": "^5.28.4",
+    "@types/node": "^20.11.30",
     "axios": "^1.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.5.0",
     "rxjs": "^7.8.1",
-    "utils": "link:@mui/material/utils"
+    "vite-plugin-dts": "^3.7.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
