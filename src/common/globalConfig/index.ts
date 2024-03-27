@@ -1,9 +1,14 @@
 import axios, { AxiosInstance } from 'axios';
 import { Application, ApplicationEvent } from '../application';
+declare global {
+  interface Window {
+    YocaleFinder: Application;
+  }
+}
 
 const config = {
   register: () => {
-    window.YocaleFinder = window.YocaleFinder || Application;
+    window.YocaleFinder = window.YocaleFinder || new Application();
   },
   getInstance: () => {
     if (!window.YocaleFinder) {

@@ -1,18 +1,10 @@
 import React from 'react';
 import App from './App.tsx';
 import './index.css';
-import Application, {
-  Application as ApplicationClass,
-  ApplicationEntity,
-  ApplicationEventType,
-} from './common/application/index.ts';
 import ReactDOM from 'react-dom/client';
+import globalConfig from './common/globalConfig';
 
-declare global {
-  interface Window {
-    YocaleFinder: ApplicationClass;
-  }
-}
+globalConfig.register();
 
 const CONTAINER_ID = 'yocale-quick-find';
 
@@ -27,7 +19,3 @@ ReactDOM.createRoot(document.getElementById(CONTAINER_ID)!).render(
     <App />
   </React.StrictMode>,
 );
-
-export { Application, ApplicationEntity, ApplicationEventType };
-
-window.YocaleFinder = window.YocaleFinder || Application;
