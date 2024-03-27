@@ -3,8 +3,6 @@ import MainDialog from '../MainDialog';
 import ApplicationProvider from '../../providers/ApplicationProvider';
 import globalConfig from '../../common/globalConfig';
 
-console.log({ instance: globalConfig.getInstance() });
-
 const queryClient = new QueryClient();
 
 const YocaleFinder = () => {
