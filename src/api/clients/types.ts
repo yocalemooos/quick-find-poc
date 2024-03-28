@@ -1,4 +1,5 @@
 export interface Client {
+  id: string | number;
   businessId: number;
   businessName: string;
   clientAppointmentHistoryUrl: string;
@@ -20,6 +21,7 @@ export interface Client {
   userId: number;
   userProfilePicture: string;
   dependents: unknown[];
+  label: string;
 }
 
 export interface Tag {

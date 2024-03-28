@@ -3,24 +3,30 @@ import useGetClients from '../../queries/use-get-clients';
 import { ApplicationEntity, ApplicationEventType } from '../../common/application';
 import { Autocomplete, Box, CircularProgress, TextField, Typography } from '@mui/material';
 import Search from '@mui/icons-material/Search';
-import User from '@mui/icons-material/VerifiedUserOutlined';
+import User from '@mui/icons-material/Person';
+import Menu from '@mui/icons-material/Menu';
 import globalConfig from '../../common/globalConfig';
+import { NavigationMenuItems } from '../../common/constants/navigation';
 export type AutoCompleteComponentProps = {
   onSelect?: (value?: unknown) => void;
 };
 
 const AutoCompleteComponent: React.FC<AutoCompleteComponentProps> = (props) => {
   const { data, isLoading } = useGetClients({});
-  const clients = data?.data?.items || [];
+  const clients: Array<Record<string, string>> = [
+    ...NavigationMenuItems,
+    ...(data?.data?.items || []),
+  ] as unknown as Array<Record<string, string>>;
   return (
     <Autocomplete
       options={clients}
-      getOptionLabel={(option) => `${option.clientId}`}
+      getOptionLabel={(option) => option?.label || `${option?.firstName} ${option?.lastName}`}
+      getOptionKey={(option) => option.id || option.clientId}
       sx={{ minWidth: { xs: 'auto', sm: 400 } }}
       onChange={(_, value) => {
         globalConfig.getInstance().broadcast({
-          type: ApplicationEventType.Redirection,
-          entityType: ApplicationEntity.Client,
+          type: !value?.clientId ? ApplicationEventType.Navigation : ApplicationEventType.Redirection,
+          entityType: !value?.clientId ? ApplicationEntity.Navigation : ApplicationEntity.Client,
           data: value,
         });
         props?.onSelect?.(value);
@@ -38,8 +44,10 @@ const AutoCompleteComponent: React.FC<AutoCompleteComponentProps> = (props) => {
       loading={isLoading}
       renderOption={(props, option) => (
         <Box component='li' sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }} {...props}>
-          <User />
-          <Typography sx={{ ml: 2 }} variant='body2'>{`${option?.firstName} ${option?.lastName}`}</Typography>
+          {option.label ? <Menu /> : <User />}
+          <Typography sx={{ ml: 2 }} variant='body2'>
+            {option?.label || `${option?.firstName} ${option?.lastName}`}
+          </Typography>
         </Box>
       )}
     />

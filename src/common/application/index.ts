@@ -5,19 +5,46 @@ export interface ApplicationOptions {
   token: string | undefined;
 }
 
+export enum NavigationItem {
+  Calendar = 'calendar',
+  DashboardProvider = 'dashboard-provider',
+  DashboardBusiness = 'dashboard-business',
+  Client = 'client',
+  Staff = 'staff-section',
+  Staffs = 'staffs',
+  Schedules = 'schedules',
+  Business = 'business',
+  Settings = 'settings',
+  ClientList = 'clients',
+  WaitList = 'wait-list',
+  Submissions = 'submissions',
+  Invoices = 'invoices',
+  BusinessProfile = 'business-profile',
+  Locations = 'locations',
+  Services = 'services',
+  Resources = 'resources',
+  Forms = 'forms',
+  Products = 'products',
+  BusinessSettings = 'business-settings',
+  WidgetSettings = 'widget-settings',
+  Subscription = 'subscriptions',
+  RWG = 'reserve-with-google',
+  PaymentSettings = 'payment-settings',
+}
+
 export enum ApplicationEntity {
   Navigation = 'navigation',
   Service = 'service',
   Staff = 'staff',
   Customer = 'customer',
   Client = 'client',
-
   Application = 'application',
 }
 
 export enum ApplicationEventType {
   Redirection = 'redirection',
   Initialized = 'initialized',
+  Navigation = 'navigation',
 }
 
 export interface ApplicationEvent<T = unknown> {
