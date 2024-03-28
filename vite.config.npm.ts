@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 export default defineConfig({
   build: {
-    outDir: 'dist/npm',
+    outDir: 'dist',
     //Specifies that the output of the build will be a library.
     lib: {
       //Defines the entry point for the library build. It resolves
